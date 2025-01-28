@@ -1,6 +1,6 @@
-/* Big Time Clock
+/* Big Time Clock v2
 
-   David Johnson-Davies - www.technoblogy.com - 28th January 2020
+   David Johnson-Davies - www.technoblogy.com - 28th January 2025
    ATtiny3216 @ 5 MHz (internal oscillator; BOD disabled)
    
    CC BY 4.0
@@ -36,7 +36,7 @@ const int Dash = 11;
 
 const int Ndigits = 4;
 uint8_t Digits[Ndigits] = { Dash, Dash, Dash, Dash };
-uint8_t Pins[Ndigits] = { 0, 1, 4, 5};                 // Port B output for each digit
+uint8_t Pins[Ndigits] = { 0, 1, 4, 5};                // Port B output for each digit
 int Digit = 0;
 
 void DisplaySetup () {
@@ -73,11 +73,11 @@ void DisplayNextDigit() {
 int ButtonState = 0;
 
 void ButtonSetup () {
-  PORTA.PIN1CTRL = PORT_PULLUPEN_bm;                   // PA1 input pullup
+  PORTA.PIN1CTRL = PORT_PULLUPEN_bm;                  // PA1 input pullup
 }
 
 boolean ButtonDown () {
-  return (PORTA.IN & PIN1_bm) == 0;                    // True if button pressed
+  return (PORTA.IN & PIN1_bm) == 0;                   // True if button pressed
 }
 
 // Real-Time Clock **********************************************
@@ -130,7 +130,7 @@ ISR(RTC_PIT_vect) {
   minutes = (Time / 120) % 60;
 #ifdef TWELVEHOUR
   hours = (Time / 7200) % 12;
-#elif
+#else
   hours = (Time / 7200) % 24;
 #endif
   if (ButtonDown()) {
@@ -140,7 +140,7 @@ ISR(RTC_PIT_vect) {
     if (ButtonState == 0) {                           // Advance hours
 #ifdef TWELVEHOUR
       hours = (hours + 1) % 12;
-#elif
+#else
       hours = (hours + 1) % 24;
 #endif
     } else {                                          // Advance minutes
